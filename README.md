@@ -21,7 +21,15 @@ Create the `config/packages/kikwik_cookie.yaml` config file and clear the cache
 
 ```yaml
 kikwik_cookie:
-    cookie_name:        'kwc_consent'
-    cookie_lifetime:    60              # number days after cookie expiration
-    privacy_route:      'app_privacy'   # default is null
+    cookie_prefix:      'kwc_consent'
+    cookie_lifetime:    180             # number days after cookie expiration (default is 6 months)
+    privacy_route:      'app_privacy'   # privacy route or URL (default is null)
+```
+
+Import routes bundle in `config/routes/kikwik_cookie.yaml`:
+
+```yaml
+kikwik_cookie_bundle:
+    resource: '@KikwikCookieBundle/Resources/config/routes.xml'
+    prefix: '/'
 ```

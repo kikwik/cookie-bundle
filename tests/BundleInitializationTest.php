@@ -28,6 +28,7 @@ class BundleInitializationTest extends KernelTestCase
         $kernel->addTestBundle(KikwikCookieBundle::class);
         $kernel->addTestBundle(TwigBundle::class);
         $kernel->handleOptions($options);
+        $kernel->addTestRoutingFile(__DIR__.'/../src/Resources/config/routes.xml');
 
         return $kernel;
     }
@@ -54,8 +55,26 @@ class BundleInitializationTest extends KernelTestCase
         $kernel = self::bootKernel();
 
         $client = new KernelBrowser($kernel);
-        $client->request('GET','/_error/404');
+        $client->request('GET','/');
         $this->assertSame(404, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
+        $this->assertStringNotContainsString('js-kwc-btn-privacy',$client->getResponse()->getContent());
+    }
+
+    public function testCookieBannerWithPrivacyUrl()
+    {
+        // Boot the kernel with a config closure, the handleOptions call in createKernel is important for that to work
+        $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){
+            // Add some configuration
+            $kernel->addTestConfig(__DIR__.'/kikwik_cookie_with-privacy-url.yaml');
+        }]);
+
+        $client = new KernelBrowser($kernel);
+        $client->request('GET','/');
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
+        $this->assertStringContainsString('js-kwc-btn-privacy',$client->getResponse()->getContent());
     }
 }

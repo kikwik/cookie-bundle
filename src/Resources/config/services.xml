@@ -3,13 +3,19 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services
         http://symfony.com/schema/dic/services/services-1.0.xsd">
-  <services>
+    <services>
 
-      <service id="kikwik_cookie.event_subscriber.cookie_event_subscriber" class="Kikwik\CookieBundle\EventSubscriber\CookieEventSubscriber" public="true">
-          <argument type="service" id="twig"/>
-          <argument type="service" id="router.default"/>
-          <tag name="kernel.event_subscriber"/>
-      </service>
+        <!-- EventSubscriber\CookieEventSubscriber -->
+        <service id="kikwik_cookie.event_subscriber.cookie_event_subscriber" class="Kikwik\CookieBundle\EventSubscriber\CookieEventSubscriber" public="true">
+            <argument type="service" id="twig"/>
+            <argument type="service" id="router.default"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
 
-  </services>
+        <!-- Controller\CookieController -->
+        <service id="kikwik_cookie.controller.cookie_controller" class="Kikwik\CookieBundle\Controller\CookieController">
+            <tag name="controller.service_arguments"/>
+        </service>
+
+    </services>
 </container>

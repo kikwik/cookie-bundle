@@ -18,8 +18,13 @@ class KikwikCookieExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $cookieEventSubscriber = $container->getDefinition('kikwik_cookie.event_subscriber.cookie_event_subscriber');
-        $cookieEventSubscriber->setArgument('$cookieName', $config['cookie_name']);
+        $cookieEventSubscriber->setArgument('$cookiePrefix', $config['cookie_prefix']);
         $cookieEventSubscriber->setArgument('$privacyRoute', $config['privacy_route']);
+
+
+        $cookieController = $container->getDefinition('kikwik_cookie.controller.cookie_controller');
+        $cookieController->setArgument('$cookiePrefix', $config['cookie_prefix']);
+        $cookieController->setArgument('$cookieLifetime', $config['cookie_lifetime']);
     }
 
 }
