@@ -1,0 +1,26 @@
+{
+    "name": "kikwik/cookie-bundle",
+    "description": "Cookie banner for Symfony 5",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Davide Scarpato",
+            "email": "davide@kikwik.it"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.5",
+        "symfony/framework-bundle": "^5.4|^6.0"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^5.4|^6.0",
+        "nyholm/symfony-bundle-test": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kikwik\\CookieBundle\\": "src/"
+        }
+    }
+}
