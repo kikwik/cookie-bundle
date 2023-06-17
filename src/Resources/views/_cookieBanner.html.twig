@@ -4,10 +4,12 @@
 
 
     <div class="float-end">
-        <a href="#" class="btn btn-sm btn-success">Accetta tutti</a>
-        <a href="#" class="btn btn-sm btn-danger">Rifiuta tutti</a>
-        <a href="#" class="btn btn-sm btn-warning">Scegli</a>
-        <a href="#" class="btn btn-sm btn-info">Informativa privacy</a>
+        <a href="#" class="js-kwc-accept btn btn-sm btn-success">Accetta tutti</a>
+        <a href="#" class="js-kwc-deny btn btn-sm btn-danger">Rifiuta tutti</a>
+        <a href="#" class="js-kwc-choose btn btn-sm btn-warning">Scegli</a>
+        {% if privacy_route %}
+            <a href="{{ path(privacy_route) }}" class="btn btn-sm btn-info">Informativa privacy</a>
+        {% endif %}
     </div>
 
 </div>

@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 class CookieEventSubscriber implements EventSubscriberInterface
@@ -23,11 +24,16 @@ class CookieEventSubscriber implements EventSubscriberInterface
      * @var null|string
      */
     private $cookieValue = null;
+    /**
+     * @var null|string
+     */
+    private $privacyRoute;
 
-    public function __construct(Environment $twig, string $cookieName)
+    public function __construct(Environment $twig, UrlGeneratorInterface $urlGenerator, string $cookieName, ?string $privacyRoute)
     {
         $this->cookieName = $cookieName;
         $this->twig = $twig;
+        $this->privacyRoute = $privacyRoute;
     }
 
     public static function getSubscribedEvents(): array
@@ -47,7 +53,12 @@ class CookieEventSubscriber implements EventSubscriberInterface
     {
         if($responseEvent->isMainRequest() && is_null($this->cookieValue))
         {
-            $cookieBanner = sprintf('<div class="kwc-banner">%s</div>',$this->twig->render('@KikwikCookie/_cookieBanner.html.twig'));
+            $cookieBanner = sprintf('<div class="kwc-banner">%s</div><script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>',
+                $this->twig->render('@KikwikCookie/_cookieBanner.html.twig',[
+                    'privacy_route' => $this->privacyRoute
+                ]),
+                filemtime(__DIR__.'/../Resources/public/cookie.js')
+            );
 
             $response = $responseEvent->getResponse();
 

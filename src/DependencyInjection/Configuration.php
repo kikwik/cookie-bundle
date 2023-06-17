@@ -16,6 +16,8 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('cookie_name')->defaultValue('kwc_consent')->cannotBeEmpty()->end()
+                ->integerNode('cookie_lifetime')->defaultValue(60)->info('number days after cookie expiration')->end()
+                ->scalarNode('privacy_route')->defaultNull()->end()
             ->end()
         ;
 

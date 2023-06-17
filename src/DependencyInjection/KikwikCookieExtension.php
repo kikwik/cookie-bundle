@@ -19,6 +19,7 @@ class KikwikCookieExtension extends Extension
 
         $cookieEventSubscriber = $container->getDefinition('kikwik_cookie.event_subscriber.cookie_event_subscriber');
         $cookieEventSubscriber->setArgument('$cookieName', $config['cookie_name']);
+        $cookieEventSubscriber->setArgument('$privacyRoute', $config['privacy_route']);
     }
 
 }
