@@ -23,7 +23,17 @@ Create the `config/packages/kikwik_cookie.yaml` config file and clear the cache
 kikwik_cookie:
     cookie_prefix:      'kwc_consent'
     cookie_lifetime:    180             # number days after cookie expiration (default is 6 months)
-    privacy_route:      'app_privacy'   # privacy route or URL (default is null)
+    privacy_policy:     'app_privacy'   # privacy policy route or URL (default is null)
+    cookie_policy:      'app_cookie'    # cookie policy route or URL (default is null)
+    banner_classes:
+        wrapper: 'position-fixed bottom-0 start-0 end-0 p-1 border-top border-3 bg-white'
+        actionWrapper: 'float-md-end text-center'
+        btnAccept: 'btn btn-sm btn-success my-1'
+        btnDeny: 'btn btn-sm btn-danger my-1'
+        btnChoose: 'btn btn-sm btn-warning my-1'
+        btnPrivacy: 'btn btn-sm btn-info my-1'
+        btnCookie: 'btn btn-sm btn-info my-1'    
+    
 ```
 
 Import routes bundle in `config/routes/kikwik_cookie.yaml`:

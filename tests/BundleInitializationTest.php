@@ -59,10 +59,11 @@ class BundleInitializationTest extends KernelTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
-        $this->assertStringNotContainsString('js-kwc-btn-privacy',$client->getResponse()->getContent());
+        $this->assertStringNotContainsString('js-kwc-btn-policy-privacy',$client->getResponse()->getContent());
+        $this->assertStringNotContainsString('js-kwc-btn-policy-cookie',$client->getResponse()->getContent());
     }
 
-    public function testCookieBannerWithPrivacyUrl()
+    public function testCookieBannerWithPrivacyPolicyUrl()
     {
         // Boot the kernel with a config closure, the handleOptions call in createKernel is important for that to work
         $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){
@@ -75,6 +76,24 @@ class BundleInitializationTest extends KernelTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
-        $this->assertStringContainsString('js-kwc-btn-privacy',$client->getResponse()->getContent());
+        $this->assertStringContainsString('js-kwc-btn-policy-privacy',$client->getResponse()->getContent());
+        $this->assertStringContainsString('/privacy-policy-url',$client->getResponse()->getContent());
+    }
+
+    public function testCookieBannerWithCookiePolicyUrl()
+    {
+        // Boot the kernel with a config closure, the handleOptions call in createKernel is important for that to work
+        $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){
+            // Add some configuration
+            $kernel->addTestConfig(__DIR__.'/kikwik_cookie_with-cookie-url.yaml');
+        }]);
+
+        $client = new KernelBrowser($kernel);
+        $client->request('GET','/');
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
+        $this->assertStringContainsString('js-kwc-btn-policy-cookie',$client->getResponse()->getContent());
+        $this->assertStringContainsString('/cookie-policy-url',$client->getResponse()->getContent());
     }
 }

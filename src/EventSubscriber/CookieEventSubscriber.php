@@ -2,6 +2,7 @@
 
 namespace Kikwik\CookieBundle\EventSubscriber;
 
+use Kikwik\CookieBundle\Service\ConsentManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -13,33 +14,41 @@ use Twig\Environment;
 
 class CookieEventSubscriber implements EventSubscriberInterface
 {
+
+
     /**
-     * @var string
+     * @var ConsentManager
      */
-    private $cookiePrefix;
+    private $consentManager;
     /**
      * @var Environment
      */
     private $twig;
     /**
-     * @var null|string
-     */
-    private $cookieValue = null;
-    /**
-     * @var null|string
-     */
-    private $privacyRoute;
-    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
+    /**
+     * @var string|null
+     */
+    private $privacyPolicy;
+    /**
+     * @var string|null
+     */
+    private $cookiePolicy;
+    /**
+     * @var array
+     */
+    private $bannerClasses;
 
-    public function __construct(Environment $twig, UrlGeneratorInterface $urlGenerator, string $cookiePrefix, ?string $privacyRoute)
+    public function __construct(ConsentManager $consentManager, Environment $twig, UrlGeneratorInterface $urlGenerator, ?string $privacyPolicy, ?string $cookiePolicy, array $bannerClasses)
     {
+        $this->consentManager = $consentManager;
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
-        $this->cookiePrefix = $cookiePrefix;
-        $this->privacyRoute = $privacyRoute;
+        $this->privacyPolicy = $privacyPolicy;
+        $this->cookiePolicy = $cookiePolicy;
+        $this->bannerClasses = $bannerClasses;
     }
 
     public static function getSubscribedEvents(): array
@@ -52,37 +61,64 @@ class CookieEventSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $requestEvent)
     {
-        $this->cookieValue = $requestEvent->getRequest()->cookies->get($this->cookiePrefix.'_banner', null);
+        $this->consentManager->init($requestEvent->getRequest());
     }
 
     public function onKernelResponse(ResponseEvent $responseEvent)
     {
-        if($responseEvent->isMainRequest() && is_null($this->cookieValue))
+        $this->consentManager->init($responseEvent->getRequest());
+
+        if($responseEvent->isMainRequest())
         {
-            $privacy_url = $this->privacyRoute;
-            if($this->privacyRoute)
+            if($this->consentManager->getUserHasChoosen())
             {
-                try{
-                    $privacy_url = $this->urlGenerator->generate($this->privacyRoute);
+                // inject the review icon
+            }
+            else
+            {
+                // inject the consent banner
+                $cookieBanner = sprintf('<div class="kwc-banner">%s</div><script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>',
+                    $this->twig->render('@KikwikCookie/_cookieBanner.html.twig',[
+                        'privacy_url' => $this->generateUrl($this->privacyPolicy),
+                        'cookie_url' => $this->generateUrl($this->cookiePolicy),
+                        'bannerClasses' => $this->bannerClasses,
+                    ]),
+                    filemtime(__DIR__.'/../Resources/public/cookie.js')
+                );
+
+                $response = $responseEvent->getResponse();
+
+                $content = $response->getContent();
+                if(strpos($content, '</body>') !== false)
+                {
+                    $content = str_replace('</body>',$cookieBanner.'</body>', $content);
+                    $response->setContent($content);
                 }
-                catch (RouteNotFoundException $e){}
             }
+        }
+    }
 
-            $cookieBanner = sprintf('<div class="kwc-banner">%s</div><script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>',
-                $this->twig->render('@KikwikCookie/_cookieBanner.html.twig',[
-                    'privacy_url' => $privacy_url,
-                ]),
-                filemtime(__DIR__.'/../Resources/public/cookie.js')
-            );
-
-            $response = $responseEvent->getResponse();
-
-            $content = $response->getContent();
-            if(strpos($content, '</body>') !== false)
+    /**
+     * Transform $routeOrUrl into the url if the route is defined
+     * otherwise return the plain $routeOrUrl value
+     *
+     * @return string|null
+     */
+    private function generateUrl($routeOrUrl): ?string
+    {
+        if($routeOrUrl)
+        {
+            try{
+                return $this->urlGenerator->generate($routeOrUrl);
+            }
+            catch (RouteNotFoundException $e)
             {
-                $content = str_replace('</body>',$cookieBanner.'</body>', $content);
-                $response->setContent($content);
+                return $routeOrUrl;
             }
+        }
+        else
+        {
+            return null;
         }
     }
 }

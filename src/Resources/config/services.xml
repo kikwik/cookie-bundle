@@ -5,15 +5,24 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
+
+        <!-- Service\ConsentManager -->
+        <service id="kikwik_cookie.service.consent_manager" class="Kikwik\CookieBundle\Service\ConsentManager">
+        </service>
+
+
         <!-- EventSubscriber\CookieEventSubscriber -->
         <service id="kikwik_cookie.event_subscriber.cookie_event_subscriber" class="Kikwik\CookieBundle\EventSubscriber\CookieEventSubscriber" public="true">
+            <argument type="service" id="kikwik_cookie.service.consent_manager"/>
             <argument type="service" id="twig"/>
             <argument type="service" id="router.default"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
+
         <!-- Controller\CookieController -->
         <service id="kikwik_cookie.controller.cookie_controller" class="Kikwik\CookieBundle\Controller\CookieController">
+            <argument type="service" id="kikwik_cookie.service.consent_manager"/>
             <tag name="controller.service_arguments"/>
         </service>
 

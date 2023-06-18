@@ -2,6 +2,7 @@
 
 namespace Kikwik\CookieBundle\Controller;
 
+use Kikwik\CookieBundle\Service\ConsentManager;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,28 +10,22 @@ use Symfony\Component\HttpFoundation\Response;
 class CookieController
 {
     /**
-     * @var string
+     * @var ConsentManager
      */
-    private $cookiePrefix;
-    /**
-     * @var int
-     */
-    private $cookieLifetime;
+    private $consentManager;
 
-    public function __construct(string $cookiePrefix, int $cookieLifetime)
+    public function __construct(ConsentManager $consentManager)
     {
-        $this->cookiePrefix = $cookiePrefix;
-        $this->cookieLifetime = $cookieLifetime;
+        $this->consentManager = $consentManager;
     }
 
     public function save(Request $request)
     {
+        $this->consentManager->init($request);
+        $this->consentManager->choose(['technical'=>true]);
+
         $response = new Response();
-        $response->headers->setCookie(Cookie::create(
-            $this->cookiePrefix.'_banner',
-            date('Y-m-d-His'),
-            strtotime(sprintf('+%d days',$this->cookieLifetime)))
-        );
+        $this->consentManager->setCookie($response);
         return $response;
     }
 
