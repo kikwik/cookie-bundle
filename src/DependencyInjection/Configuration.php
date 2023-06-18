@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('banner_classes')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('wrapper')->defaultValue('position-fixed bottom-0 start-0 end-0 p-1 border-top border-3 bg-white')->end()
+                        ->scalarNode('wrapper')->defaultValue('position-fixed bottom-0 start-0 end-0 p-1 border-top border-3 bg-white lh-sm fw-light small')->end()
                         ->scalarNode('actionWrapper')->defaultValue('float-md-end text-center')->end()
                         ->scalarNode('btnAccept')->defaultValue('btn btn-sm btn-success my-1')->end()
                         ->scalarNode('btnDeny')->defaultValue('btn btn-sm btn-danger my-1')->end()

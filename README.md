@@ -43,3 +43,5 @@ kikwik_cookie_bundle:
     resource: '@KikwikCookieBundle/Resources/config/routes.xml'
     prefix: '/'
 ```
+
+Copy translations file from `vendor/kikwik/cookie-bundle/src/Resources/translations/KikwikCookieBundle.xx.yaml` into `translations` directory to change banner text

@@ -1,17 +1,16 @@
 <div class="js-kwc-wrapper {{ bannerClasses.wrapper }}">
 
-    Questo sito utilizza cookie tecnici per i quali non è richiesto consenso.
-
+    {{ 'banner.description.technical'|trans({},'KikwikCookieBundle') }}
 
     <div class="{{ bannerClasses.actionWrapper }}">
-        <a href="{{ path('kikwik_cookie_save') }}" class="js-kwc-btn-accept {{ bannerClasses.btnAccept }}">Accetta</a>
-{#        <a href="#" class="js-kwc-btn-deny {{ bannerClasses.btnDeny }}">Rifiuta</a>#}
-{#        <a href="#" class="js-kwc-btn-choose {{ bannerClasses.btnChoose }}">Scegli</a>#}
+        <a href="{{ path('kikwik_cookie_save') }}" class="js-kwc-btn-accept {{ bannerClasses.btnAccept }}">{{ 'banner.btn.accept'|trans({},'KikwikCookieBundle') }}</a>
+{#        <a href="#" class="js-kwc-btn-deny {{ bannerClasses.btnDeny }}">{{ 'banner.btn.deny'|trans({},'KikwikCookieBundle') }}</a>#}
+{#        <a href="#" class="js-kwc-btn-choose {{ bannerClasses.btnChoose }}">{{ 'banner.btn.choose'|trans({},'KikwikCookieBundle') }}</a>#}
         {% if privacy_url %}
-            <a href="{{ privacy_url }}" class="js-kwc-btn-policy-privacy {{ bannerClasses.btnPrivacy }}">Informativa privacy</a>
+            <a href="{{ privacy_url }}" class="js-kwc-btn-policy-privacy {{ bannerClasses.btnPrivacy }}">{{ 'banner.btn.privacy'|trans({},'KikwikCookieBundle') }}</a>
         {% endif %}
         {% if cookie_url %}
-            <a href="{{ cookie_url }}" class="js-kwc-btn-policy-cookie {{ bannerClasses.btnCookie }}">Cookie policy</a>
+            <a href="{{ cookie_url }}" class="js-kwc-btn-policy-cookie {{ bannerClasses.btnCookie }}">{{ 'banner.btn.cookie'|trans({},'KikwikCookieBundle') }}</a>
         {% endif %}
     </div>
 

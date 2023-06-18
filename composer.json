@@ -14,7 +14,8 @@
         "php": ">=7.2.5",
         "ext-json": "*",
         "symfony/framework-bundle": "^5.4|^6.0",
-        "symfony/twig-bundle": "^5.4|^6.0"
+        "symfony/twig-bundle": "^5.4|^6.0",
+        "symfony/translation": "^5.4|^6.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^5.4|^6.0",

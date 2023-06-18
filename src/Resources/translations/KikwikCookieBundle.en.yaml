@@ -1,0 +1,10 @@
+banner:
+    description:
+        technical: 'This site uses technical cookies for which consent is not required.'
+
+    btn:
+        accept:     'Accept'
+        deny:       'Deny'
+        choose:     'Choose'
+        privacy:    'Privacy policy'
+        cookie:     'Cookie policy'
