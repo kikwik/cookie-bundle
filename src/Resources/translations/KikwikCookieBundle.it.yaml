@@ -1,10 +1,17 @@
 banner:
     description:
-        technical: 'Questo sito utilizza cookie tecnici per i quali non è richiesto consenso.'
+        only_technical: 'Questo sito utilizza cookie tecnici per i quali non è richiesto consenso.'
+        with_categories: 'Questo sito utilizza cookie tecnici e, previo consenso, cookie analitici anche di terze parti, per migliorare la navigazione sul sito.'
+    information:
+        cookie:    'Clicca su “%cookie%” per avere più informazioni sui cookie.'
+        privacy:    'Clicca su “%privacy%” per leggere l''informativa completa.'
+    instructions:
+        only_technical: 'Clicca su “%accept%” per chiudere questo banner.'
+        with_categories: 'Il consenso può essere concesso cliccando su “%accept%” o negato cliccando su “%deny%”.'
 
     btn:
+        cookie:     'Cookie policy'
+        privacy:    'Informativa privacy'
         accept:     'Accetta'
         deny:       'Rifiuta'
         choose:     'Scegli'
-        privacy:    'Informativa privacy'
-        cookie:     'Cookie policy'

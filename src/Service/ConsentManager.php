@@ -4,6 +4,7 @@ namespace Kikwik\CookieBundle\Service;
 
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 class ConsentManager
@@ -16,11 +17,26 @@ class ConsentManager
      * @var int
      */
     private $cookieLifetime;
+    /**
+     * @var string
+     */
+    private $consentVersion;
+    /**
+     * @var array
+     */
+    private $categories;
 
-    public function __construct(string $cookiePrefix, int $cookieLifetime)
+
+    public function __construct(RequestStack $requestStack, string $cookiePrefix, int $cookieLifetime, string $consentVersion, array $categories)
     {
         $this->cookiePrefix = $cookiePrefix;
         $this->cookieLifetime = $cookieLifetime;
+        $this->consentVersion = $consentVersion;
+        $this->categories = $categories;
+        if($requestStack->getCurrentRequest())
+        {
+            $this->init($requestStack->getCurrentRequest());
+        }
     }
 
     private $userHasChoosen = null;
@@ -29,22 +45,40 @@ class ConsentManager
 
     public function init(Request $request)
     {
-        $this->userHasChoosen = $request->cookies->get($this->cookiePrefix.'_has_chosen', false);
+        $userConsentVersion = $request->cookies->get($this->cookiePrefix.'_version', false);
+        $this->userHasChoosen = $userConsentVersion == $this->consentVersion;
         $this->consentKey = $request->cookies->get($this->cookiePrefix.'_key', $this->uuidv4());
-        $this->consentValue = json_decode($request->cookies->get($this->cookiePrefix.'_value',''),true);
+        $this->consentValue = json_decode($request->cookies->get($this->cookiePrefix.'_value','[]'),true);
     }
 
-    public function choose(array $value)
+    /**
+     * @return array
+     */
+    public function getAvailableCategories(): array
     {
-        $this->userHasChoosen = true;
-        $this->consentValue = $value;
+        return $this->categories;
+    }
+
+    public function allowCategory(string $category)
+    {
+        $this->consentValue[$category] = true;
+    }
+
+    public function denyCategory(string $category)
+    {
+        $this->consentValue[$category] = false;
+    }
+
+    public function isCategoryAllowed(string $category): bool
+    {
+        return $this->userHasChoosen && $this->consentValue[$category] ?? false;
     }
 
     public function setCookie(Response $response)
     {
         $response->headers->setCookie(Cookie::create(
-            $this->cookiePrefix.'_has_chosen',
-            $this->getUserHasChoosen(),
+            $this->cookiePrefix.'_version',
+            $this->consentVersion,
             strtotime(sprintf('+%d days',$this->cookieLifetime)))
         );
         $response->headers->setCookie(Cookie::create(
@@ -54,7 +88,7 @@ class ConsentManager
         );
         $response->headers->setCookie(Cookie::create(
             $this->cookiePrefix.'_value',
-            json_encode($this->getConsentValue()),
+            json_encode($this->consentValue),
             strtotime(sprintf('+%d days',$this->cookieLifetime)))
         );
     }
@@ -73,18 +107,9 @@ class ConsentManager
      */
     public function getConsentKey(): string
     {
-        if(is_null($this->consentKey)) throw new \Exception('ConsentManager not initialized');
         return $this->consentKey;
     }
 
-    /**
-     * @return array
-     */
-    public function getConsentValue(): array
-    {
-        if(is_null($this->consentValue)) throw new \Exception('ConsentManager not initialized');
-        return $this->consentValue;
-    }
 
 
 

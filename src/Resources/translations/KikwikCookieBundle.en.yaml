@@ -1,10 +1,17 @@
 banner:
     description:
-        technical: 'This site uses technical cookies for which consent is not required.'
+        only_technical: 'This site uses technical cookies for which consent is not required.'
+        with_categories: 'This site uses technical cookies and, with prior consent, analytical cookies (also from third parties) to improve navigation on the site.'
+    information:
+        cookie:    'Click on “%cookie%” for more information on cookies.'
+        privacy:    'Click on “%privacy%” to read the full privacy policy.'
+    instructions:
+        only_technical: 'Click on “%accept%” to close this banner.'
+        with_categories: 'Consent can be granted by clicking on “%accept%” or denied by clicking on “%deny%”.'
 
     btn:
-        accept:     'Accept'
-        deny:       'Deny'
-        choose:     'Choose'
         privacy:    'Privacy policy'
         cookie:     'Cookie policy'
+        accept:     'Accept all'
+        deny:       'Deny'
+        choose:     'Choose'

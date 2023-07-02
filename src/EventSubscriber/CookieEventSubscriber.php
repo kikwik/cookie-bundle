@@ -40,6 +40,10 @@ class CookieEventSubscriber implements EventSubscriberInterface
      * @var array
      */
     private $bannerClasses;
+    /**
+     * @var array
+     */
+    private $categories;
 
     public function __construct(ConsentManager $consentManager, Environment $twig, UrlGeneratorInterface $urlGenerator, ?string $privacyPolicy, ?string $cookiePolicy, array $bannerClasses)
     {
@@ -49,25 +53,18 @@ class CookieEventSubscriber implements EventSubscriberInterface
         $this->privacyPolicy = $privacyPolicy;
         $this->cookiePolicy = $cookiePolicy;
         $this->bannerClasses = $bannerClasses;
+        $this->categories = $consentManager->getAvailableCategories();
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => 'onKernelRequest',
             KernelEvents::RESPONSE => 'onKernelResponse',
         ];
     }
 
-    public function onKernelRequest(RequestEvent $requestEvent)
-    {
-        $this->consentManager->init($requestEvent->getRequest());
-    }
-
     public function onKernelResponse(ResponseEvent $responseEvent)
     {
-        $this->consentManager->init($responseEvent->getRequest());
-
         if($responseEvent->isMainRequest())
         {
             if($this->consentManager->getUserHasChoosen())
@@ -82,6 +79,7 @@ class CookieEventSubscriber implements EventSubscriberInterface
                         'privacy_url' => $this->generateUrl($this->privacyPolicy),
                         'cookie_url' => $this->generateUrl($this->cookiePolicy),
                         'bannerClasses' => $this->bannerClasses,
+                        'categories' => $this->categories,
                     ]),
                     filemtime(__DIR__.'/../Resources/public/cookie.js')
                 );

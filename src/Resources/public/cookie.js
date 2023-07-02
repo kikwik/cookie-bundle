@@ -1,6 +1,6 @@
 document.addEventListener('click', function (event) {
 
-    if (event.target.matches('.js-kwc-btn-accept')) {
+    if (event.target.matches('.js-kwc-btn-accept') || event.target.matches('.js-kwc-btn-deny')) {
         event.preventDefault();
         const url = event.target.href;
         fetch(url, {

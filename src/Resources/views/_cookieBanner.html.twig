@@ -1,17 +1,47 @@
-<div class="js-kwc-wrapper {{ bannerClasses.wrapper }}">
+<div class="js-kwc-wrapper {{ bannerClasses.wrapper }}" style="z-index:999999;">
 
-    {{ 'banner.description.technical'|trans({},'KikwikCookieBundle') }}
+    {% set translationType = categories | length ? 'with_categories' : 'only_technical' %}
+    <div class="row">
+        <div class="col-md">
+            {{ ('banner.description.'~translationType) | trans({},'KikwikCookieBundle') | raw }}<br/>
+            {% if cookie_url %}
+                {{ 'banner.information.cookie' | trans({
+                    '%cookie%': 'banner.btn.cookie'|trans({},'KikwikCookieBundle')
+                },'KikwikCookieBundle') | raw }}
+            {% endif %}
+            {% if privacy_url %}
+                {{ 'banner.information.privacy' | trans({
+                    '%privacy%': 'banner.btn.privacy'|trans({},'KikwikCookieBundle')
+                },'KikwikCookieBundle') | raw }}
+            {% endif %}
+            {% if cookie_url or privacy_url %}<br/>{% endif %}
+            {{ ('banner.instructions.'~translationType) | trans({
+                '%accept%': 'banner.btn.accept'|trans({},'KikwikCookieBundle'),
+                '%deny%': 'banner.btn.deny'|trans({},'KikwikCookieBundle')
+            },'KikwikCookieBundle') | raw }}
+        </div>
+        <div class="col-md-auto">
+            <div class="{{ bannerClasses.actionWrapper }}">
+                {% if cookie_url %}
+                    <a href="{{ cookie_url }}" class="js-kwc-btn-policy-cookie {{ bannerClasses.btnCookie }}">{{ 'banner.btn.cookie'|trans({},'KikwikCookieBundle') }}</a>
+                {% endif %}
+                {% if privacy_url %}
+                    <a href="{{ privacy_url }}" class="js-kwc-btn-policy-privacy {{ bannerClasses.btnPrivacy }}">{{ 'banner.btn.privacy'|trans({},'KikwikCookieBundle') }}</a>
+                {% endif %}
+                <br/>
 
-    <div class="{{ bannerClasses.actionWrapper }}">
-        <a href="{{ path('kikwik_cookie_save') }}" class="js-kwc-btn-accept {{ bannerClasses.btnAccept }}">{{ 'banner.btn.accept'|trans({},'KikwikCookieBundle') }}</a>
-{#        <a href="#" class="js-kwc-btn-deny {{ bannerClasses.btnDeny }}">{{ 'banner.btn.deny'|trans({},'KikwikCookieBundle') }}</a>#}
-{#        <a href="#" class="js-kwc-btn-choose {{ bannerClasses.btnChoose }}">{{ 'banner.btn.choose'|trans({},'KikwikCookieBundle') }}</a>#}
-        {% if privacy_url %}
-            <a href="{{ privacy_url }}" class="js-kwc-btn-policy-privacy {{ bannerClasses.btnPrivacy }}">{{ 'banner.btn.privacy'|trans({},'KikwikCookieBundle') }}</a>
-        {% endif %}
-        {% if cookie_url %}
-            <a href="{{ cookie_url }}" class="js-kwc-btn-policy-cookie {{ bannerClasses.btnCookie }}">{{ 'banner.btn.cookie'|trans({},'KikwikCookieBundle') }}</a>
-        {% endif %}
+                <a href="{{ path('kikwik_cookie_accept') }}" class="js-kwc-btn-accept {{ bannerClasses.btnAccept }}">{{ 'banner.btn.accept'|trans({},'KikwikCookieBundle') }}</a>
+
+                {% if categories | length %}
+                    <a href="{{ path('kikwik_cookie_deny') }}" class="js-kwc-btn-deny {{ bannerClasses.btnDeny }}">{{ 'banner.btn.deny'|trans({},'KikwikCookieBundle') }}</a>
+                    {#            <a href="#" class="js-kwc-btn-choose {{ bannerClasses.btnChoose }}">{{ 'banner.btn.choose'|trans({},'KikwikCookieBundle') }}</a>#}
+                {% endif %}
+            </div>
+        </div>
     </div>
+
+
+
+
 
 </div>

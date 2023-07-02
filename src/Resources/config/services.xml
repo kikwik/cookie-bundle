@@ -8,7 +8,9 @@
 
         <!-- Service\ConsentManager -->
         <service id="kikwik_cookie.service.consent_manager" class="Kikwik\CookieBundle\Service\ConsentManager">
+            <argument type="service" id="request_stack"/>
         </service>
+        <service id="Kikwik\CookieBundle\Service\ConsentManager" alias="kikwik_cookie.service.consent_manager"/>
 
 
         <!-- EventSubscriber\CookieEventSubscriber -->

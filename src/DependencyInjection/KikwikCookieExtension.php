@@ -21,12 +21,15 @@ class KikwikCookieExtension extends Extension
         $consentManager = $container->getDefinition('kikwik_cookie.service.consent_manager');
         $consentManager->setArgument('$cookiePrefix', $config['cookie_prefix']);
         $consentManager->setArgument('$cookieLifetime', $config['cookie_lifetime']);
+        $consentManager->setArgument('$consentVersion', $config['consent_version']);
+        $consentManager->setArgument('$categories', $config['categories']);
 
 
         $cookieEventSubscriber = $container->getDefinition('kikwik_cookie.event_subscriber.cookie_event_subscriber');
         $cookieEventSubscriber->setArgument('$privacyPolicy', $config['privacy_policy']);
         $cookieEventSubscriber->setArgument('$cookiePolicy', $config['cookie_policy']);
         $cookieEventSubscriber->setArgument('$bannerClasses', $config['banner_classes']);
+
 
 
     }
