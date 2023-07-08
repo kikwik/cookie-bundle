@@ -16,17 +16,20 @@ document.addEventListener('click', function (event) {
                     banner.style.display = 'none';
                 }
 
-                // reload the page
-                fetch(window.location.href)
-                    .then(function (response){
-                        // The call was successful!
-                        return response.text();
-                    }).then(function (html) {
-                    // This is the HTML from our response as a text string
-                    document.open('text/html');
-                    document.write(html);
-                    document.close();
-                });
+                if(event.target.matches('.js-kwc-btn-accept'))
+                {
+                    // reload the page
+                    fetch(window.location.href)
+                        .then(function (response){
+                            // The call was successful!
+                            return response.text();
+                        }).then(function (html) {
+                        // This is the HTML from our response as a text string
+                        document.open('text/html');
+                        document.write(html);
+                        document.close();
+                    });
+                }
             }
         })
     }
