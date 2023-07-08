@@ -18,6 +18,7 @@
             <argument type="service" id="kikwik_cookie.service.consent_manager"/>
             <argument type="service" id="twig"/>
             <argument type="service" id="router.default"/>
+            <argument type="service" id="translator.default"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 

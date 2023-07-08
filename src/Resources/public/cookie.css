@@ -1,0 +1,50 @@
+.js-kwc-toggle-banner{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin: 1rem;
+}
+
+.js-kwc-wrapper{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    background-color: #fff;
+    padding: 0.5rem;
+    line-height: 1.25;
+    font-size: .875em;
+    border-top: 3px solid #dee2e6;
+    font-weight: lighter;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.js-kwc-description,
+.js-kwc-actions{
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.js-kwc-actions{
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .js-kwc-description {
+        flex: 1 0 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .js-kwc-actions {
+        flex: 0 0 auto;
+        width: auto;
+        text-align: right;
+    }
+}

@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class CookieEventSubscriber implements EventSubscriberInterface
@@ -29,6 +30,10 @@ class CookieEventSubscriber implements EventSubscriberInterface
      */
     private $urlGenerator;
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+    /**
      * @var string|null
      */
     private $privacyPolicy;
@@ -45,11 +50,12 @@ class CookieEventSubscriber implements EventSubscriberInterface
      */
     private $categories;
 
-    public function __construct(ConsentManager $consentManager, Environment $twig, UrlGeneratorInterface $urlGenerator, ?string $privacyPolicy, ?string $cookiePolicy, array $bannerClasses)
+    public function __construct(ConsentManager $consentManager, Environment $twig, UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator, ?string $privacyPolicy, ?string $cookiePolicy, array $bannerClasses)
     {
         $this->consentManager = $consentManager;
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
         $this->privacyPolicy = $privacyPolicy;
         $this->cookiePolicy = $cookiePolicy;
         $this->bannerClasses = $bannerClasses;
@@ -67,31 +73,34 @@ class CookieEventSubscriber implements EventSubscriberInterface
     {
         if($responseEvent->isMainRequest())
         {
-            if($this->consentManager->getUserHasChoosen())
-            {
-                // inject the review icon
-            }
-            else
-            {
-                // inject the consent banner
-                $cookieBanner = sprintf('<div class="kwc-banner">%s</div><script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>',
-                    $this->twig->render('@KikwikCookie/_cookieBanner.html.twig',[
-                        'privacy_url' => $this->generateUrl($this->privacyPolicy),
-                        'cookie_url' => $this->generateUrl($this->cookiePolicy),
-                        'bannerClasses' => $this->bannerClasses,
-                        'categories' => $this->categories,
-                    ]),
-                    filemtime(__DIR__.'/../Resources/public/cookie.js')
-                );
+            $bannerDisplay = $this->consentManager->getUserHasChoosen()
+                ? 'style="display: none;"'
+                : '';
+            // inject the consent banner
+            $cookieBanner = sprintf('
+                            <a href="#" class="js-kwc-toggle-banner">%s</a>
+                            <div class="kwc-banner" %s>%s</div>
+                            <script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>
+                            <link type="text/css" rel="stylesheet" href="/bundles/kikwikcookie/cookie.css?v=%s">',
+                $this->translator->trans('banner.toggler',[],'KikwikCookieBundle'),
+                $bannerDisplay,
+                $this->twig->render('@KikwikCookie/_cookieBanner.html.twig',[
+                    'privacy_url' => $this->generateUrl($this->privacyPolicy),
+                    'cookie_url' => $this->generateUrl($this->cookiePolicy),
+                    'bannerClasses' => $this->bannerClasses,
+                    'categories' => $this->categories,
+                ]),
+                filemtime(__DIR__.'/../Resources/public/cookie.js'),
+                filemtime(__DIR__.'/../Resources/public/cookie.css')
+            );
 
-                $response = $responseEvent->getResponse();
+            $response = $responseEvent->getResponse();
 
-                $content = $response->getContent();
-                if(strpos($content, '</body>') !== false)
-                {
-                    $content = str_replace('</body>',$cookieBanner.'</body>', $content);
-                    $response->setContent($content);
-                }
+            $content = $response->getContent();
+            if(strpos($content, '</body>') !== false)
+            {
+                $content = str_replace('</body>',$cookieBanner.'</body>', $content);
+                $response->setContent($content);
             }
         }
     }

@@ -9,7 +9,7 @@ document.addEventListener('click', function (event) {
         }).then(function (response){
             if(response.ok)
             {
-                // close the banner
+                // hide the banner
                 const banner = document.querySelector('.kwc-banner');
                 if(banner)
                 {
@@ -34,6 +34,23 @@ document.addEventListener('click', function (event) {
         })
     }
 
+    if (event.target.matches('.js-kwc-toggle-banner')) {
+        event.preventDefault();
+
+        // show the banner
+        const banner = document.querySelector('.kwc-banner');
+        if(banner)
+        {
+            if(banner.style.display == 'none')
+            {
+                banner.style.display = '';
+            }
+            else
+            {
+                banner.style.display = 'none';
+            }
+        }
+    }
 
 
 });
