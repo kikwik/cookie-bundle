@@ -7,6 +7,7 @@
     padding: 0.5rem;
     margin: 1rem;
     background-color: #fff;
+    z-index: 999998;
 }
 
 .js-kwc-wrapper{
