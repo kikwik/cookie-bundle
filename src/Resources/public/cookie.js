@@ -1,6 +1,6 @@
 document.addEventListener('click', function (event) {
 
-    if (event.target.matches('.js-kwc-btn-accept') || event.target.matches('.js-kwc-btn-deny')) {
+    if (event.target.closest('.js-kwc-btn-accept') || event.target.closest('.js-kwc-btn-deny')) {
         event.preventDefault();
         // make a POST request to consent url
         const url = event.target.href;
@@ -34,7 +34,7 @@ document.addEventListener('click', function (event) {
         })
     }
 
-    if (event.target.matches('.js-kwc-toggle-banner')) {
+    if (event.target.closest('.js-kwc-toggle-banner')) {
         event.preventDefault();
 
         // show the banner
