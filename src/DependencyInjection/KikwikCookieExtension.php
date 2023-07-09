@@ -23,6 +23,7 @@ class KikwikCookieExtension extends Extension
         $consentManager->setArgument('$cookieLifetime', $config['cookie_lifetime']);
         $consentManager->setArgument('$consentVersion', $config['consent_version']);
         $consentManager->setArgument('$categories', $config['categories']);
+        $consentManager->setArgument('$enableConsentLog', $config['enable_consent_log']);
 
 
         $cookieEventSubscriber = $container->getDefinition('kikwik_cookie.event_subscriber.cookie_event_subscriber');

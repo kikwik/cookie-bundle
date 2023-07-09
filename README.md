@@ -14,6 +14,13 @@ following command to download the latest stable version of this bundle:
 $ composer require kikwik/cookie-bundle
 ```
 
+Update the database to create the kw_cookie_consent_log table:
+
+```console
+$ php bin/console make:migration
+$ php bin/console doctrine:migrations:migrate
+```
+
 Configuration
 -------------
 
@@ -21,12 +28,13 @@ Create the `config/packages/kikwik_cookie.yaml` config file and clear the cache
 
 ```yaml
 kikwik_cookie:
-    cookie_prefix:      'kwc_consent'
+    cookie_prefix:      'kwc_consent'   # the prefix for the cookie name (default is kwc_consent)
     cookie_lifetime:    180             # number days after cookie expiration (default is 6 months)
     consent_version:    '1.0'           # consent version (change to invalidate old consents)
-    privacy_policy:     'app_privacy'   # privacy policy route or URL (default is null)
-    cookie_policy:      'app_cookie'    # cookie policy route or URL (default is null)
-    categories:         [ ]             # example: [ 'functional', 'analytics', 'profiling', 'marketing' ]
+    privacy_policy:     'app_privacy'   # route or url for privacy policy (default is null)
+    cookie_policy:      'app_cookie'    # route or url for cookie policy (default is null)
+    categories:         [ ]             # list of available categories, example: [ 'functional', 'analytics', 'profiling', 'marketing' ]
+    enable_consent_log: false           # save user consent in database (default is false)
     banner_classes:
         wrapper: 'position-fixed bottom-0 start-0 end-0 p-1 border-top border-3 bg-white'
         actionWrapper: 'float-md-end text-center'

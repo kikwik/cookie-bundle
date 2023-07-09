@@ -1,0 +1,20 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="Kikwik\CookieBundle\Entity\CookieConsentLog" table="kw_cookie_consent_log">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="consentKey" type="string" column="consentKey"/>
+        <field name="consentValue" type="json" column="consentValue"/>
+        <field name="consentVersion" type="string" column="consentVersion"/>
+        <field name="consentAt" type="datetime" column="consentAt"/>
+        <field name="consentFromIp" type="string" column="consentFromIp" nullable="true"/>
+        <field name="userAgent" type="text" column="userAgent" nullable="true"/>
+
+    </entity>
+
+</doctrine-mapping>

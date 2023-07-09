@@ -2,8 +2,11 @@
 
 namespace Kikwik\CookieBundle\Tests;
 
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Kikwik\CookieBundle\Controller\CookieController;
 use Kikwik\CookieBundle\EventSubscriber\CookieEventSubscriber;
 use Kikwik\CookieBundle\KikwikCookieBundle;
+use Kikwik\CookieBundle\Service\ConsentManager;
 use Nyholm\BundleTest\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -25,10 +28,19 @@ class BundleInitializationTest extends KernelTestCase
          * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
+
+        // bundle to test
         $kernel->addTestBundle(KikwikCookieBundle::class);
+
+        // Add some other bundles we depend on
+        $kernel->addTestBundle(DoctrineBundle::class);
         $kernel->addTestBundle(TwigBundle::class);
+
         $kernel->handleOptions($options);
+
+        // Add some configuration
         $kernel->addTestRoutingFile(__DIR__.'/../src/Resources/config/routes.xml');
+        $kernel->addTestConfig(__DIR__.'/config.yaml');
 
         return $kernel;
     }
@@ -41,13 +53,18 @@ class BundleInitializationTest extends KernelTestCase
         // Get the container
         $container = $kernel->getContainer();
 
-        // Or for FrameworkBundle@^5.3.6 to access private services without the PublicCompilerPass
-        // $container = self::getContainer();
-
         // Test if your services exists
-        $this->assertTrue($container->has('kikwik_cookie.event_subscriber.cookie_event_subscriber'));
+        $this->assertTrue($container->has('kikwik_cookie.event_subscriber.cookie_event_subscriber'),'service CookieEventSubscriber should exists');
         $service = $container->get('kikwik_cookie.event_subscriber.cookie_event_subscriber');
         $this->assertInstanceOf(CookieEventSubscriber::class, $service);
+
+        $this->assertTrue($container->has('kikwik_cookie.service.consent_manager'),'service ConsentManager should exists');
+        $service = $container->get('kikwik_cookie.service.consent_manager');
+        $this->assertInstanceOf(ConsentManager::class, $service);
+
+        $this->assertTrue($container->has('kikwik_cookie.controller.cookie_controller'),'service CookieController should exists');
+        $service = $container->get('kikwik_cookie.controller.cookie_controller');
+        $this->assertInstanceOf(CookieController::class, $service);
     }
 
     public function testCookieBanner()

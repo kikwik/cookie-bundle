@@ -2,6 +2,8 @@
 
 namespace Kikwik\CookieBundle\Service;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Kikwik\CookieBundle\Entity\CookieConsentLog;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -9,6 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ConsentManager
 {
+    /**
+     * @var ManagerRegistry
+     */
+    private $doctrine;
     /**
      * @var string
      */
@@ -25,14 +31,21 @@ class ConsentManager
      * @var array
      */
     private $categories;
+    /**
+     * @var bool
+     */
+    private $enableConsentLog;
 
 
-    public function __construct(RequestStack $requestStack, string $cookiePrefix, int $cookieLifetime, string $consentVersion, array $categories)
+    public function __construct(RequestStack $requestStack, ManagerRegistry $doctrine, string $cookiePrefix, int $cookieLifetime, string $consentVersion, array $categories, bool $enableConsentLog)
     {
+        $this->doctrine = $doctrine;
         $this->cookiePrefix = $cookiePrefix;
         $this->cookieLifetime = $cookieLifetime;
         $this->consentVersion = $consentVersion;
         $this->categories = $categories;
+        $this->enableConsentLog = $enableConsentLog;
+
         if($requestStack->getCurrentRequest())
         {
             $this->init($requestStack->getCurrentRequest());
@@ -43,12 +56,17 @@ class ConsentManager
     private $consentKey = null;
     private $consentValue = null;
 
+    private $clientIp = null;
+    private $userAgent = null;
+
     public function init(Request $request)
     {
         $userConsentVersion = $request->cookies->get($this->cookiePrefix.'_version', false);
         $this->userHasChoosen = $userConsentVersion == $this->consentVersion;
         $this->consentKey = $request->cookies->get($this->cookiePrefix.'_key', $this->uuidv4());
         $this->consentValue = json_decode($request->cookies->get($this->cookiePrefix.'_value','[]'),true);
+        $this->clientIp = $request->getClientIp();
+        $this->userAgent = $request->headers->get('User-Agent');
     }
 
     /**
@@ -83,7 +101,7 @@ class ConsentManager
         );
         $response->headers->setCookie(Cookie::create(
             $this->cookiePrefix.'_key',
-            $this->getConsentKey(),
+            $this->consentKey,
             strtotime(sprintf('+%d days',$this->cookieLifetime)))
         );
         $response->headers->setCookie(Cookie::create(
@@ -91,6 +109,21 @@ class ConsentManager
             json_encode($this->consentValue),
             strtotime(sprintf('+%d days',$this->cookieLifetime)))
         );
+
+        if($this->enableConsentLog)
+        {
+            $consentLog = new CookieConsentLog();
+            $consentLog->setConsentKey($this->consentKey);
+            $consentLog->setConsentValue($this->consentValue);
+            $consentLog->setConsentVersion($this->consentVersion);
+            $consentLog->setConsentAt(new \DateTimeImmutable());
+            $consentLog->setConsentFromIp($this->clientIp);
+            $consentLog->setUserAgent($this->userAgent);
+
+            $em = $this->doctrine->getManager();
+            $em->persist($consentLog);
+            $em->flush();
+        }
     }
 
     /**
@@ -102,13 +135,6 @@ class ConsentManager
         return $this->userHasChoosen;
     }
 
-    /**
-     * @return string
-     */
-    public function getConsentKey(): string
-    {
-        return $this->consentKey;
-    }
 
 
 
