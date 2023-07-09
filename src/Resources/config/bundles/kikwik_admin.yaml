@@ -1,0 +1,29 @@
+sidebar:
+    cookie_consent_log:
+        title: Consensi cookie
+        icon: fas fa-cookie
+        route: kikwik_admin_cookie_consent_log
+
+admins:
+    cookie_consent_log:
+        entityClass: Kikwik\CookieBundle\Entity\CookieConsentLog
+        singularName: consenso cookie
+        pluralName: consensi cookie
+        gender: male
+        fields:
+            consentKey:     { label: Chiave univoca consenso }
+            consentValue:   { label: Consenso utente }
+            consentVersion: { label: Versione }
+            consentAt:      { label: Consenso del }
+            consentFromIp:  { label: IP utente }
+            userAgent:      { label: User agent, displayType: commentIcon }
+        collection:
+            display:        [ consentKey, consentValue, consentVersion, consentAt, consentFromIp, userAgent ]
+            quickSearch:    [ consentKey ]
+            filters:        [ consentKey, consentVersion, consentAt, consentFromIp, userAgent ]
+            actions:
+                new: { enabled: false }
+        object:
+            actions:
+                edit:   { enabled: false }
+                delete: { enabled: false }

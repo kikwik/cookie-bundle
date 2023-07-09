@@ -11,7 +11,7 @@
         <field name="consentKey" type="string" column="consentKey"/>
         <field name="consentValue" type="json" column="consentValue"/>
         <field name="consentVersion" type="string" column="consentVersion"/>
-        <field name="consentAt" type="datetime" column="consentAt"/>
+        <field name="consentAt" type="datetime_immutable" column="consentAt"/>
         <field name="consentFromIp" type="string" column="consentFromIp" nullable="true"/>
         <field name="userAgent" type="text" column="userAgent" nullable="true"/>
 

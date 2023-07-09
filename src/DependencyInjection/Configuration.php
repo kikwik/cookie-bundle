@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cookie_policy')->defaultNull()->info('route or url for cookie policy')->end()
                 ->arrayNode('categories')->scalarPrototype()->end()->info('list of available categories, example: [ \'functional\', \'analytics\', \'profiling\', \'marketing\' ]')->end()
                 ->booleanNode('enable_consent_log')->defaultFalse()->info('save user consent in database')->end()
+                ->booleanNode('enable_admin')->defaultTrue()->end()
                 ->arrayNode('banner_classes')->info('banner classes for buttons and links')
                     ->addDefaultsIfNotSet()
                     ->children()

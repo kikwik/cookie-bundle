@@ -49,6 +49,11 @@ class CookieConsentLog
     /* CUSTOM METHODS                     */
     /**************************************/
 
+    public function __toString()
+    {
+        return (string)$this->consentKey;
+    }
+
 
     /**************************************/
     /* GETTERS & SETTERS                  */
