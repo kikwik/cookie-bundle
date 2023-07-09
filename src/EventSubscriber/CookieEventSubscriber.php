@@ -74,12 +74,12 @@ class CookieEventSubscriber implements EventSubscriberInterface
         if($responseEvent->isMainRequest())
         {
             $bannerDisplay = $this->consentManager->getUserHasChoosen()
-                ? 'style="display: none;"'
+                ? ' style="display: none;"'
                 : '';
             // inject the consent banner
             $cookieBanner = sprintf('
                             <a href="#" class="js-kwc-toggle-banner">%s</a>
-                            <div class="kwc-banner" %s>%s</div>
+                            <div class="kwc-banner"%s>%s</div>
                             <script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>
                             <link type="text/css" rel="stylesheet" href="/bundles/kikwikcookie/cookie.css?v=%s">',
                 $this->translator->trans('banner.toggler',[],'KikwikCookieBundle'),
