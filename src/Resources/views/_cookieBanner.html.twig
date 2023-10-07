@@ -28,10 +28,10 @@
         {% endif %}
         <br/>
 
-        <a href="{{ path('kikwik_cookie_accept') }}" class="js-kwc-btn-accept {{ bannerClasses.btnAccept }}">{{ 'banner.btn.accept'|trans({},'KikwikCookieBundle') }}</a>
+        <a href="{{ path('kikwik_cookie_accept') }}" class="js-kwc-btn-accept {{ bannerClasses.btnAccept }}" role="button">{{ 'banner.btn.accept'|trans({},'KikwikCookieBundle') }}</a>
 
         {% if categories | length %}
-            <a href="{{ path('kikwik_cookie_deny') }}" class="js-kwc-btn-deny {{ bannerClasses.btnDeny }}">{{ 'banner.btn.deny'|trans({},'KikwikCookieBundle') }}</a>
+            <a href="{{ path('kikwik_cookie_deny') }}" class="js-kwc-btn-deny {{ bannerClasses.btnDeny }}" role="button">{{ 'banner.btn.deny'|trans({},'KikwikCookieBundle') }}</a>
             {#            <a href="#" class="js-kwc-btn-choose {{ bannerClasses.btnChoose }}">{{ 'banner.btn.choose'|trans({},'KikwikCookieBundle') }}</a>#}
         {% endif %}
     </div>

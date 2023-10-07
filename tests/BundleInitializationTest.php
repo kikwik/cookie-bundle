@@ -74,7 +74,7 @@ class BundleInitializationTest extends KernelTestCase
         $client = new KernelBrowser($kernel);
         $client->request('GET','/');
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('<div class="kwc-banner" role="dialog"',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
         $this->assertStringNotContainsString('js-kwc-btn-policy-privacy',$client->getResponse()->getContent());
         $this->assertStringNotContainsString('js-kwc-btn-policy-cookie',$client->getResponse()->getContent());
@@ -91,7 +91,7 @@ class BundleInitializationTest extends KernelTestCase
         $client = new KernelBrowser($kernel);
         $client->request('GET','/');
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('<div class="kwc-banner" role="dialog"',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-policy-privacy',$client->getResponse()->getContent());
         $this->assertStringContainsString('/privacy-policy-url',$client->getResponse()->getContent());
@@ -108,7 +108,7 @@ class BundleInitializationTest extends KernelTestCase
         $client = new KernelBrowser($kernel);
         $client->request('GET','/');
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('<div class="kwc-banner" role="dialog"',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-policy-cookie',$client->getResponse()->getContent());
         $this->assertStringContainsString('/cookie-policy-url',$client->getResponse()->getContent());
@@ -125,7 +125,7 @@ class BundleInitializationTest extends KernelTestCase
         $client = new KernelBrowser($kernel);
         $client->request('GET','/');
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('<div class="kwc-banner" role="dialog"',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-policy-cookie',$client->getResponse()->getContent());
         $this->assertStringContainsString('/cookie-policy-url',$client->getResponse()->getContent());
@@ -144,7 +144,7 @@ class BundleInitializationTest extends KernelTestCase
         $client = new KernelBrowser($kernel);
         $client->request('GET','/');
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('<div class="kwc-banner">',$client->getResponse()->getContent());
+        $this->assertStringContainsString('<div class="kwc-banner" role="dialog"',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-accept',$client->getResponse()->getContent());
         $this->assertStringContainsString('js-kwc-btn-deny',$client->getResponse()->getContent());
     }

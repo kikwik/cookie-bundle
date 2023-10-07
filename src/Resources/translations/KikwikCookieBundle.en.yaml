@@ -9,7 +9,9 @@ banner:
         only_technical: 'Click on “%accept%” to close this banner.'
         with_categories: 'Consent can be granted by clicking on “%accept%” or denied by clicking on “%deny%”.'
 
-    toggler: '<i class="fas fa-solid fa-cookie"></i>'
+    toggler:
+        icon: '<i class="fas fa-solid fa-cookie"></i>'
+        text: 'Cookie settings'
 
     btn:
         privacy:    'Privacy policy'

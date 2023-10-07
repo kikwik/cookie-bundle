@@ -14,6 +14,7 @@ document.addEventListener('click', function (event) {
                 if(banner)
                 {
                     banner.style.display = 'none';
+                    banner.ariaHidden = 'true';
                 }
 
                 if(event.target.matches('.js-kwc-btn-accept'))
@@ -44,10 +45,12 @@ document.addEventListener('click', function (event) {
             if(banner.style.display == 'none')
             {
                 banner.style.display = '';
+                banner.ariaHidden = 'false';
             }
             else
             {
                 banner.style.display = 'none';
+                banner.ariaHidden = 'true';
             }
         }
     }

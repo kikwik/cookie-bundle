@@ -73,17 +73,19 @@ class CookieEventSubscriber implements EventSubscriberInterface
     {
         if($responseEvent->isMainRequest())
         {
-            $bannerDisplay = $this->consentManager->getUserHasChoosen()
-                ? ' style="display: none;"'
-                : '';
+            $bannerDisplayStyle = $this->consentManager->getUserHasChoosen()
+                ? ' style="display: none;" aria-hidden="true"'
+                : ' aria-hidden="false"';
+
             // inject the consent banner
             $cookieBanner = sprintf('
-                            <a href="#" class="js-kwc-toggle-banner">%s</a>
-                            <div class="kwc-banner"%s>%s</div>
+                            <a href="#" class="js-kwc-toggle-banner" aria-label="%s">%s</a>
+                            <div class="kwc-banner" role="dialog" aria-modal="false" aria-label="Cookie Banner" %s>%s</div>
                             <script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>
                             <link type="text/css" rel="stylesheet" href="/bundles/kikwikcookie/cookie.css?v=%s">',
-                $this->translator->trans('banner.toggler',[],'KikwikCookieBundle'),
-                $bannerDisplay,
+                $this->translator->trans('banner.toggler.text',[],'KikwikCookieBundle'),
+                $this->translator->trans('banner.toggler.icon',[],'KikwikCookieBundle'),
+                $bannerDisplayStyle,
                 $this->twig->render('@KikwikCookie/_cookieBanner.html.twig',[
                     'privacy_url' => $this->generateUrl($this->privacyPolicy),
                     'cookie_url' => $this->generateUrl($this->cookiePolicy),
@@ -99,8 +101,14 @@ class CookieEventSubscriber implements EventSubscriberInterface
             $content = $response->getContent();
             if(strpos($content, '</body>') !== false)
             {
-                $content = str_replace('</body>',$cookieBanner.'</body>', $content);
-                $response->setContent($content);
+                // new code: inject cookie banner just after the opening <body> tag
+                $matches = preg_split('/(<body.*?>)/i', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+                $injectedHTML = $matches[0] . $matches[1] . $cookieBanner . $matches[2];
+                $response->setContent($injectedHTML);
+
+                // old code: inject cookie banner just before the closing </body> tag
+                // $content = str_replace('</body>',$cookieBanner.'</body>', $content);
+                // $response->setContent($content);
             }
         }
     }
