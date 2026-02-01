@@ -1,6 +1,8 @@
-<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Kikwik\CookieBundle\Entity\CookieConsentLog" table="kw_cookie_consent_log">
 
