@@ -7,14 +7,14 @@
   <route
           id="kikwik_cookie_accept"
           path="_kw_cookie_accept"
-          controller="kikwik_cookie.controller.cookie_controller:acceptAll"
+          controller="kikwik_cookie.controller.cookie_controller::acceptAll"
           methods="POST"
   />
 
   <route
           id="kikwik_cookie_deny"
           path="_kw_cookie_deny"
-          controller="kikwik_cookie.controller.cookie_controller:denyAll"
+          controller="kikwik_cookie.controller.cookie_controller::denyAll"
           methods="POST"
   />
 
