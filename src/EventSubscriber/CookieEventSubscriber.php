@@ -79,10 +79,11 @@ class CookieEventSubscriber implements EventSubscriberInterface
 
             // inject the consent banner
             $cookieBanner = sprintf('
-                            <a href="#" class="js-kwc-toggle-banner" aria-label="%s">%s</a>
+                            <a href="#" class="js-kwc-toggle-banner" aria-label="%s" title="%s">%s</a>
                             <div class="kwc-banner" role="dialog" aria-modal="false" aria-label="Cookie Banner" %s>%s</div>
                             <script src="/bundles/kikwikcookie/cookie.js?v=%s"></script>
                             <link type="text/css" rel="stylesheet" href="/bundles/kikwikcookie/cookie.css?v=%s">',
+                $this->translator->trans('banner.toggler.text',[],'KikwikCookieBundle'),
                 $this->translator->trans('banner.toggler.text',[],'KikwikCookieBundle'),
                 $this->translator->trans('banner.toggler.icon',[],'KikwikCookieBundle'),
                 $bannerDisplayStyle,
