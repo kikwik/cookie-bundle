@@ -4,6 +4,7 @@ namespace Kikwik\CookieBundle\Controller;
 
 use Kikwik\CookieBundle\Service\ConsentManager;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,7 +29,8 @@ class CookieController
             $this->consentManager->allowCategory($category);
         }
 
-        $response = new Response();
+        $referer = $request->headers->get('referer');
+        $response = new RedirectResponse($referer ?: '/');
         $this->consentManager->setCookie($response);
         return $response;
     }
@@ -42,7 +44,8 @@ class CookieController
             $this->consentManager->denyCategory($category);
         }
 
-        $response = new Response();
+        $referer = $request->headers->get('referer');
+        $response = new RedirectResponse($referer ?: '/');
         $this->consentManager->setCookie($response);
         return $response;
     }
