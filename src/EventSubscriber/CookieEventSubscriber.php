@@ -103,9 +103,11 @@ class CookieEventSubscriber implements EventSubscriberInterface
             if(strpos($content, '</body>') !== false)
             {
                 // new code: inject cookie banner just after the opening <body> tag
-                $matches = preg_split('/(<body.*?>)/i', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-                $injectedHTML = $matches[0] . $matches[1] . $cookieBanner . $matches[2];
-                $response->setContent($injectedHTML);
+                $matches = preg_split('/(<body\b[^>]*>)/is', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+                if ($matches !== false && count($matches) >= 3) {
+                    $injectedHTML = $matches[0] . $matches[1] . $cookieBanner . $matches[2];
+                    $response->setContent($injectedHTML);
+                }
 
                 // old code: inject cookie banner just before the closing </body> tag
                 // $content = str_replace('</body>',$cookieBanner.'</body>', $content);
