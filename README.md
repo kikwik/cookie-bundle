@@ -36,8 +36,6 @@ kikwik_cookie:
     categories:         [ ]             # list of available categories, example: [ 'functional', 'analytics', 'profiling', 'marketing' ]
     enable_consent_log: false           # save user consent in database (default is false)
     banner_classes:
-        wrapper: 'position-fixed bottom-0 start-0 end-0 p-1 border-top border-3 bg-white'
-        actionWrapper: 'float-md-end text-center'
         btnAccept: 'btn btn-sm btn-success my-1'
         btnDeny: 'btn btn-sm btn-danger my-1'
         btnChoose: 'btn btn-sm btn-warning my-1'
